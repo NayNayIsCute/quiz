@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfect Holiday Planner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 30px 16px 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1d1d1d;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 0 24px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .intro {
+      text-align: center;
+      color: #d0d0d0;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section:first-of-type {
+      border-top: none;
+      margin-top: 10px;
+      padding-top: 0;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .section-note {
+      margin: 0 0 18px;
+      color: #bdbdbd;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      background: #2a2a2a;
+      border: 3px solid transparent;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.18s ease;
+      user-select: none;
+    }
+
+    .option:hover {
+      transform: translateY(-2px);
+      background: #313131;
+    }
+
+    .option.selected {
+      border-color: white;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.2);
+    }
+
+    .option img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .option-label {
+      padding: 12px 12px 14px;
+      font-weight: bold;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .pace-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .pace-btn {
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      background: #2a2a2a;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.18s ease;
+    }
+
+    .pace-btn:hover {
+      background: #333;
+    }
+
+    .pace-btn.selected {
+      border-color: white;
+    }
+
+    .submit-wrap {
+      text-align: center;
+      margin-top: 36px;
+    }
+
+    .submit-btn {
+      padding: 16px 28px;
+      border: none;
+      border-radius: 14px;
+      background: white;
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.92;
+    }
+
+    .warning {
+      margin-top: 10px;
+      color: #ffb3b3;
+      font-size: 14px;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .card {
+        padding: 18px;
+      }
+
+      .option img {
+        height: 130px;
+      }
+
+      .section-title {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Build Our Perfect Holiday</h1>
+      <p class="intro">Pick the dream version. Some sections are one choice only, some let you choose more.</p>
+
+      <form action="https://formspree.io/f/mwvarrlz" method="POST" onsubmit="return prepareSubmit()">
+
+        <div class="section">
+          <h2 class="section-title">1. Trip vibe</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="trip_vibe" id="trip_vibe">
+          <div class="grid">
+            <div class="option" onclick="pickSingle('trip_vibe', 'Adventure', this)">
+              <img src="adventure.jpg" alt="Adventure">
+              <div class="option-label">Adventure</div>
+            </div>
+            <div class="option" onclick="pickSingle('trip_vibe', 'Relaxing escape', this)">
+              <img src="relaxing.jpg" alt="Relaxing escape">
+              <div class="option-label">Relaxing escape</div>
+            </div>
+            <div class="option" onclick="pickSingle('trip_vibe', 'Road trip chaos', this)">
+              <img src="roadtrip.jpg" alt="Road trip chaos">
+              <div class="option-label">Road trip chaos</div>
+            </div>
+            <div class="option" onclick="pickSingle('trip_vibe', 'City exploring', this)">
+              <img src="city_exploring.jpg" alt="City exploring">
+              <div class="option-label">City exploring</div>
+            </div>
+            <div class="option" onclick="pickSingle('trip_vibe', 'Hot summer escape', this)">
+              <img src="summer_escape.jpg" alt="Hot summer escape">
+              <div class="option-label">Hot summer escape</div>
+            </div>
+            <div class="option" onclick="pickSingle('trip_vibe', 'Winter fairytale', this)">
+              <img src="winter_fairytale.jpg" alt="Winter fairytale">
+              <div class="option-label">Winter fairytale</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">2. Destination type</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="destination" id="destination">
+          <div class="grid">
+            <div class="option" onclick="pickSingle('destination', 'Sea / beach', this)">
+              <img src="sea.jpg" alt="Sea">
+              <div class="option-label">Sea / beach</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Mountains', this)">
+              <img src="mountains.jpg" alt="Mountains">
+              <div class="option-label">Mountains</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Big city', this)">
+              <img src="big_city.jpg" alt="Big city">
+              <div class="option-label">Big city</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Small historic town', this)">
+              <img src="historic_town.jpg" alt="Historic town">
+              <div class="option-label">Small historic town</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Countryside', this)">
+              <img src="countryside.jpg" alt="Countryside">
+              <div class="option-label">Countryside</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Lake', this)">
+              <img src="lake.jpg" alt="Lake">
+              <div class="option-label">Lake</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Forest', this)">
+              <img src="forest.jpg" alt="Forest">
+              <div class="option-label">Forest</div>
+            </div>
+            <div class="option" onclick="pickSingle('destination', 'Desert / exotic warm place', this)">
+              <img src="desert.jpg" alt="Desert">
+              <div class="option-label">Desert / exotic warm place</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">3. Transportation</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="transportation" id="transportation">
+          <div class="grid">
+            <div class="option" onclick="pickSingle('transportation', 'Car', this)">
+              <img src="car.jpg" alt="Car">
+              <div class="option-label">Car</div>
+            </div>
+            <div class="option" onclick="pickSingle('transportation', 'Plane', this)">
+              <img src="plane.jpg" alt="Plane">
+              <div class="option-label">Plane</div>
+            </div>
+            <div class="option" onclick="pickSingle('transportation', 'Train', this)">
+              <img src="train.jpg" alt="Train">
+              <div class="option-label">Train</div>
+            </div>
+            <div class="option" onclick="pickSingle('transportation', 'RV / camper', this)">
+              <img src="rv.jpg" alt="RV">
+              <div class="option-label">RV / camper</div>
+            </div>
+            <div class="option" onclick="pickSingle('transportation', 'Boat / ferry', this)">
+              <img src="ferry.jpg" alt="Ferry">
+              <div class="option-label">Boat / ferry</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">4. Day activities</h2>
+          <p class="section-note">Pick as many as you want</p>
+          <input type="hidden" name="day_activities" id="day_activities">
+          <div class="grid">
+            <div class="option" onclick="pickMulti('day_activities', 'Swimming', this)">
+              <img src="swimming.jpg" alt="Swimming">
+              <div class="option-label">Swimming</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Sunbathing', this)">
+              <img src="sunbathing.jpg" alt="Sunbathing">
+              <div class="option-label">Sunbathing</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Shopping', this)">
+              <img src="shopping.jpg" alt="Shopping">
+              <div class="option-label">Shopping</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Museum', this)">
+              <img src="museum.jpg" alt="Museum">
+              <div class="option-label">Museum</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Car meet / car show', this)">
+              <img src="car_meet.jpg" alt="Car meet">
+              <div class="option-label">Car meet / car show</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Hiking', this)">
+              <img src="hiking.jpg" alt="Hiking">
+              <div class="option-label">Hiking</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Boat trip', this)">
+              <img src="boat_trip.jpg" alt="Boat trip">
+              <div class="option-label">Boat trip</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Spa / wellness', this)">
+              <img src="spa.jpg" alt="Spa">
+              <div class="option-label">Spa / wellness</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Theme park', this)">
+              <img src="theme_park.jpg" alt="Theme park">
+              <div class="option-label">Theme park</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Exploring old streets', this)">
+              <img src="old_streets.jpg" alt="Old streets">
+              <div class="option-label">Exploring old streets</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Photography', this)">
+              <img src="photography.jpg" alt="Photography">
+              <div class="option-label">Photography</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Zoo / aquarium', this)">
+              <img src="zoo.jpg" alt="Zoo">
+              <div class="option-label">Zoo / aquarium</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Picnic', this)">
+              <img src="picnic.jpg" alt="Picnic">
+              <div class="option-label">Picnic</div>
+            </div>
+            <div class="option" onclick="pickMulti('day_activities', 'Coffee hopping', this)">
+              <img src="coffee_hopping.jpg" alt="Coffee hopping">
+              <div class="option-label">Coffee hopping</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">5. Food & drink style</h2>
+          <p class="section-note">Pick as many as you want</p>
+          <input type="hidden" name="food_drink_style" id="food_drink_style">
+          <div class="grid">
+            <div class="option" onclick="pickMulti('food_drink_style', 'Fancy dinner', this)">
+              <img src="fancy_dinner.jpg" alt="Fancy dinner">
+              <div class="option-label">Fancy dinner</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Street food', this)">
+              <img src="street_food.jpg" alt="Street food">
+              <div class="option-label">Street food</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Breakfast in bed', this)">
+              <img src="breakfast_bed.jpg" alt="Breakfast in bed">
+              <div class="option-label">Breakfast in bed</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Cocktails', this)">
+              <img src="cocktails.jpg" alt="Cocktails">
+              <div class="option-label">Cocktails</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Wine tasting', this)">
+              <img src="wine_tasting.jpg" alt="Wine tasting">
+              <div class="option-label">Wine tasting</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Coffee and pastries', this)">
+              <img src="coffee_pastries.jpg" alt="Coffee and pastries">
+              <div class="option-label">Coffee and pastries</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Late-night snacks', this)">
+              <img src="late_snacks.jpg" alt="Late-night snacks">
+              <div class="option-label">Late-night snacks</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Local traditional food', this)">
+              <img src="local_food.jpg" alt="Local food">
+              <div class="option-label">Local traditional food</div>
+            </div>
+            <div class="option" onclick="pickMulti('food_drink_style', 'Steak / grill night', this)">
+              <img src="steak_grill.jpg" alt="Steak grill">
+              <div class="option-label">Steak / grill night</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">6. Evening activities</h2>
+          <p class="section-note">Pick as many as you want</p>
+          <input type="hidden" name="evening_activities" id="evening_activities">
+          <div class="grid">
+            <div class="option" onclick="pickMulti('evening_activities', 'Drinks out', this)">
+              <img src="drinks_out.jpg" alt="Drinks out">
+              <div class="option-label">Drinks out</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Watching movie in bed', this)">
+              <img src="movie_bed.jpg" alt="Movie in bed">
+              <div class="option-label">Watching movie in bed</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Cinema', this)">
+              <img src="cinema.jpg" alt="Cinema">
+              <div class="option-label">Cinema</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Cuddles', this)">
+              <img src="cuddles.jpg" alt="Cuddles">
+              <div class="option-label">Cuddles</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Spicy night', this)">
+              <img src="spicy_night.jpg" alt="Spicy night">
+              <div class="option-label">Spicy night</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Walking around', this)">
+              <img src="walking_night.jpg" alt="Walking around">
+              <div class="option-label">Walking around</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Live music', this)">
+              <img src="live_music.jpg" alt="Live music">
+              <div class="option-label">Live music</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Night drive', this)">
+              <img src="night_drive.jpg" alt="Night drive">
+              <div class="option-label">Night drive</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Camp', this)">
+              <img src="camp.jpg" alt="Camp">
+              <div class="option-label">Camp</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Stargazing', this)">
+              <img src="stargazing.jpg" alt="Stargazing">
+              <div class="option-label">Stargazing</div>
+            </div>
+            <div class="option" onclick="pickMulti('evening_activities', 'Board games / cozy night in', this)">
+              <img src="board_games.jpg" alt="Board games">
+              <div class="option-label">Board games / cozy night in</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">7. Romance level</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="romance_level" id="romance_level">
+          <div class="grid">
+            <div class="option" onclick="pickSingle('romance_level', 'Soft and sweet', this)">
+              <img src="soft_sweet.jpg" alt="Soft and sweet">
+              <div class="option-label">Soft and sweet</div>
+            </div>
+            <div class="option" onclick="pickSingle('romance_level', 'Flirty and playful', this)">
+              <img src="flirty_playful.jpg" alt="Flirty and playful">
+              <div class="option-label">Flirty and playful</div>
+            </div>
+            <div class="option" onclick="pickSingle('romance_level', 'Passionate', this)">
+              <img src="passionate.jpg" alt="Passionate">
+              <div class="option-label">Passionate</div>
+            </div>
+            <div class="option" onclick="pickSingle('romance_level', 'Luxurious and spoiled', this)">
+              <img src="luxury_romance.jpg" alt="Luxury romance">
+              <div class="option-label">Luxurious and spoiled</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">8. Weather preference</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="weather_preference" id="weather_preference">
+          <div class="grid">
+            <div class="option" onclick="pickSingle('weather_preference', 'Hot sunny', this)">
+              <img src="hot_sunny.jpg" alt="Hot sunny">
+              <div class="option-label">Hot sunny</div>
+            </div>
+            <div class="option" onclick="pickSingle('weather_preference', 'Warm breezy', this)">
+              <img src="warm_breezy.jpg" alt="Warm breezy">
+              <div class="option-label">Warm breezy</div>
+            </div>
+            <div class="option" onclick="pickSingle('weather_preference', 'Snowy', this)">
+              <img src="snowy.jpg" alt="Snowy">
+              <div class="option-label">Snowy</div>
+            </div>
+            <div class="option" onclick="pickSingle('weather_preference', 'Rainy cozy', this)">
+              <img src="rainy_cozy.jpg" alt="Rainy cozy">
+              <div class="option-label">Rainy cozy</div>
+            </div>
+            <div class="option" onclick="pickSingle('weather_preference', 'Autumn vibes', this)">
+              <img src="autumn.jpg" alt="Autumn">
+              <div class="option-label">Autumn vibes</div>
+            </div>
+            <div class="option" onclick="pickSingle('weather_preference', 'Spring flowers', this)">
+              <img src="spring_flowers.jpg" alt="Spring flowers">
+              <div class="option-label">Spring flowers</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">9. Travel pace</h2>
+          <p class="section-note">Pick one</p>
+          <input type="hidden" name="travel_pace" id="travel_pace">
+          <div class="pace-buttons">
+            <button type="button" class="pace-btn" onclick="pickPace('Lazy and relaxed', this)">Lazy and relaxed</button>
+            <button type="button" class="pace-btn" onclick="pickPace('Balanced', this)">Balanced</button>
+            <button type="button" class="pace-btn" onclick="pickPace('Packed with plans', this)">Packed with plans</button>
+            <button type="button" class="pace-btn" onclick="pickPace('Spontaneous', this)">Spontaneous</button>
+            <button type="button" class="pace-btn" onclick="pickPace('No plans at all', this)">No plans at all</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">10. Must-have moments</h2>
+          <p class="section-note">Choose your top 3</p>
+          <input type="hidden" name="must_have_moments" id="must_have_moments">
+          <div class="grid">
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Sunset together', this, 3)">
+              <img src="sunset.jpg" alt="Sunset together">
+              <div class="option-label">Sunset together</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Fancy dinner date', this, 3)">
+              <img src="dinner_date.jpg" alt="Dinner date">
+              <div class="option-label">Fancy dinner date</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Hotel bed cuddles', this, 3)">
+              <img src="bed_cuddles.jpg" alt="Bed cuddles">
+              <div class="option-label">Hotel bed cuddles</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Scenic drive', this, 3)">
+              <img src="scenic_drive.jpg" alt="Scenic drive">
+              <div class="option-label">Scenic drive</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Beach kiss', this, 3)">
+              <img src="beach_kiss.jpg" alt="Beach kiss">
+              <div class="option-label">Beach kiss</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Mountain view photo', this, 3)">
+              <img src="mountain_photo.jpg" alt="Mountain photo">
+              <div class="option-label">Mountain view photo</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Matching coffee morning', this, 3)">
+              <img src="coffee_morning.jpg" alt="Coffee morning">
+              <div class="option-label">Matching coffee morning</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Dancing together', this, 3)">
+              <img src="dancing.jpg" alt="Dancing together">
+              <div class="option-label">Dancing together</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Night walk', this, 3)">
+              <img src="night_walk.jpg" alt="Night walk">
+              <div class="option-label">Night walk</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Hot tub together', this, 3)">
+              <img src="hot_tub.jpg" alt="Hot tub together">
+              <div class="option-label">Hot tub together</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Car meeting', this, 3)">
+              <img src="car_meeting.jpg" alt="Car meeting">
+              <div class="option-label">Car meeting</div>
+            </div>
+            <div class="option" onclick="pickMultiLimited('must_have_moments', 'Dancing in the rain', this, 3)">
+              <img src="dancing_rain.jpg" alt="Dancing in the rain">
+              <div class="option-label">Dancing in the rain</div>
+            </div>
+          </div>
+          <div class="warning" id="must_have_moments_warning"></div>
+        </div>
+
+        <div class="submit-wrap">
+          <button class="submit-btn" type="submit">Submit our dream holiday</button>
+          <div class="warning" id="form_warning"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const multiSelections = {
+      day_activities: [],
+      food_drink_style: [],
+      evening_activities: [],
+      must_have_moments: []
+    };
+
+    function clearGroupSelection(container) {
+      const options = container.querySelectorAll('.option');
+      options.forEach(opt => opt.classList.remove('selected'));
+    }
+
+    function pickSingle(fieldId, value, element) {
+      document.getElementById(fieldId).value = value;
+      clearGroupSelection(element.parentElement);
+      element.classList.add('selected');
+    }
+
+    function pickMulti(fieldId, value, element) {
+      const list = multiSelections[fieldId];
+
+      if (list.includes(value)) {
+        multiSelections[fieldId] = list.filter(item => item !== value);
+        element.classList.remove('selected');
+      } else {
+        multiSelections[fieldId].push(value);
+        element.classList.add('selected');
+      }
+
+      document.getElementById(fieldId).value = multiSelections[fieldId].join(', ');
+    }
+
+    function pickMultiLimited(fieldId, value, element, max) {
+      const warning = document.getElementById(fieldId + '_warning');
+      const list = multiSelections[fieldId];
+
+      if (list.includes(value)) {
+        multiSelections[fieldId] = list.filter(item => item !== value);
+        element.classList.remove('selected');
+        warning.textContent = '';
+      } else {
+        if (list.length >= max) {
+          warning.textContent = 'You can only choose up to ' + max + ' options here.';
+          return;
+        }
+        multiSelections[fieldId].push(value);
+        element.classList.add('selected');
+        warning.textContent = '';
+      }
+
+      document.getElementById(fieldId).value = multiSelections[fieldId].join(', ');
+    }
+
+    function pickPace(value, button) {
+      document.getElementById('travel_pace').value = value;
+      document.querySelectorAll('.pace-btn').forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+    }
+
+    function prepareSubmit() {
+      document.getElementById('day_activities').value = multiSelections.day_activities.join(', ');
+      document.getElementById('food_drink_style').value = multiSelections.food_drink_style.join(', ');
+      document.getElementById('evening_activities').value = multiSelections.evening_activities.join(', ');
+      document.getElementById('must_have_moments').value = multiSelections.must_have_moments.join(', ');
+
+      const formWarning = document.getElementById('form_warning');
+      formWarning.textContent = '';
+
+      const requiredSingleFields = [
+        { id: 'trip_vibe', label: 'trip vibe' },
+        { id: 'destination', label: 'destination' },
+        { id: 'transportation', label: 'transportation' },
+        { id: 'romance_level', label: 'romance level' },
+        { id: 'weather_preference', label: 'weather preference' },
+        { id: 'travel_pace', label: 'travel pace' }
+      ];
+
+      for (const field of requiredSingleFields) {
+        if (!document.getElementById(field.id).value) {
+          formWarning.textContent = 'Please choose your ' + field.label + '.';
+          return false;
+        }
+      }
+
+      if (multiSelections.must_have_moments.length === 0) {
+        formWarning.textContent = 'Please choose at least one must-have moment.';
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
