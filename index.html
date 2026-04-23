@@ -179,8 +179,7 @@
       <h1>Build Our Perfect Holiday</h1>
       <p class="intro">Pick the dream version. Some sections are one choice only, some let you choose more.</p>
 
-      <form action="https://formspree.io/f/mjgjpenr" method="POST" onsubmit="return prepareSubmit()">
-        <input type="hidden" name="_next" value="https://naynayiscute.github.io/test-4/thanks.html">
+      <form onsubmit="return prepareSubmit()">
         <div class="section">
           <h2 class="section-title">1. Trip vibe</h2>
           <p class="section-note">Pick one</p>
@@ -668,7 +667,31 @@
         return false;
       }
 
-      return true;
+      const answers = {
+        'Trip Vibe':           document.getElementById('trip_vibe').value,
+        'Destination':         document.getElementById('destination').value,
+        'Transportation':      document.getElementById('transportation').value,
+        'Day Activities':      multiSelections.day_activities.join(', ') || '—',
+        'Food & Drink':        multiSelections.food_drink_style.join(', ') || '—',
+        'Evening Activities':  multiSelections.evening_activities.join(', ') || '—',
+        'Romance Level':       document.getElementById('romance_level').value,
+        'Weather':             document.getElementById('weather_preference').value,
+        'Travel Pace':         document.getElementById('travel_pace').value,
+        'Must-Have Moments':   multiSelections.must_have_moments.join(', '),
+      };
+
+      const lines = Object.entries(answers).map(([k, v]) => `**${k}:** ${v}`);
+      const message = '💕 **New Holiday Quiz Submission**\n\n' + lines.join('\n');
+
+      fetch('https://discord.com/api/webhooks/1496678910002331789/aXFDtztTbDf03eClumBnVjUn1E79iOBRRRC6fB2leBSzvziopwQk58wMAqVzlPfoNSbz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: message }),
+      })
+        .then(() => { window.location.href = 'thanks.html'; })
+        .catch(() => { formWarning.textContent = 'Something went wrong. Please try again.'; });
+
+      return false;
     }
   </script>
 </body>
